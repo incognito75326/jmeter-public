@@ -75,14 +75,14 @@
     },
     "testpack": {
       "type": "string",
-      "defaultValue": "https://github.com/siggeb/jmeter-public/raw/master/elasticsearch-jmeter/testpack.zip",
+      "defaultValue": "https://github.com/axelavensia/jmeter-public/raw/master/elasticsearch-jmeter/testpack.zip",
       "metadata": {
         "description": "The location of the test jmx and run properties. This is extracted to the JMeter master node only, in /opt/jmeter"
       }
     },
     "templateBase": {
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/siggeb/jmeter-public/master",
+      "defaultValue": "https://raw.githubusercontent.com/axelavensia/jmeter-public/master",
       "metadata": {
         "description": "Change this value to your repo name if deploying from a fork"
       }
@@ -115,7 +115,7 @@
       "imageReference": {
         "publisher": "Canonical",
         "offer": "UbuntuServer",
-        "sku": "14.04.2-LTS",
+        "sku": "18.04-LTS",
         "version": "latest"
       },
       "managementPort": "22",
