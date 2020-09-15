@@ -96,17 +96,8 @@ expand_ip_range() {
 install_java()
 {
     log "Installing Java"
-    add-apt-repository -y ppa:webupd8team/java
-    mkdir -p /var/cache/oracle-jdk8-installer
-    wget -q http://ftp.osuosl.org/pub/funtoo/distfiles/oracle-java/jdk-8u144-linux-x64.tar.gz -O /var/cache/oracle-jdk8-installer/jdk-8u144-linux-x64.tar.gz
-    sudo apt-get -y update
-    echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
-    echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections
-    cd /var/lib/dpkg/info && sudo sed -i 's|JAVA_VERSION=8u181|JAVA_VERSION=8u191|' oracle-java8-installer.*
-    sudo sed -i 's|PARTNER_URL=http://download.oracle.com/otn-pub/java/jdk/8u181-b13/96a7b8442fe848ef90c96a2fad6ed6d1/|PARTNER_URL=http://download.oracle.com/otn-pub/java/jdk/8u191-b12/2787e4a523244c269598db4e85c51e0c/|' oracle-java8-installer.*
-    sudo sed -i 's|SHA256SUM_TGZ=.*|SHA256SUM_TGZ="53c29507e2405a7ffdbba627e6d64856089b094867479edc5ede4105c1da0d65"|' oracle-java8-installer.*
-    sudo sed -i 's|J_DIR=jdk1.8.0_181|J_DIR=jdk1.8.0_191|' oracle-java8-installer.*
-    sudo apt-get -y install oracle-java8-installer
+    sudo apt update --assume-yes
+    sudo apt install default-jre --assume-yes
 }
 
 install_jmeter_service()
@@ -131,8 +122,8 @@ update_config_sub()
     export LC_ALL=en_US.UTF-8
     export LANG=en_US.UTF-8
     export LC_TYPE=en_US.UTF-8
-    wget -O /opt/jmeter/apache-jmeter-5.0/bin/rmi_keystore.jks https://github.com/siggeb/jmeter-public/raw/master/elasticsearch-jmeter/resources/rmi_keystore.jks
-    wget -O /opt/jmeter/apache-jmeter-5.0/bin/user.properties https://github.com/siggeb/jmeter-public/raw/master/elasticsearch-jmeter/resources/user.properties
+    wget -O /opt/jmeter/apache-jmeter-5.0/bin/rmi_keystore.jks https://github.com/axelavensia/jmeter-public/raw/master/elasticsearch-jmeter/resources/rmi_keystore.jks
+    wget -O /opt/jmeter/apache-jmeter-5.0/bin/user.properties https://github.com/axelavensia/jmeter-public/raw/master/elasticsearch-jmeter/resources/user.properties
     mv /opt/jmeter/apache-jmeter-5.0/bin/jmeter.properties /opt/jmeter/apache-jmeter-5.0/bin/jmeter.properties.bak
     #cat /opt/jmeter/apache-jmeter-5.0/bin/jmeter.properties.bak | sed "s|#server.rmi.ssl.disable=false|server.rmi.ssl.disable=true|" > /opt/jmeter/apache-jmeter-5.0/bin/jmeter.properties 
     #cat /opt/jmeter/apache-jmeter-5.0/bin/jmeter.properties.bak | sed "s|#server.rmi.ssl.disable=false|server.rmi.ssl.disable=false|" | sed "s|#client.rmi.localport=0|client.rmi.localport=4440|" | sed "s|#server.rmi.localport=4000|server.rmi.localport=4441|" | sed "s|#server.rmi.ssl.keystore.type=JKS|server.rmi.ssl.keystore.type=JKS|" | sed "s|#server.rmi.ssl.keystore.file=rmi_keystore.jks|server.rmi.ssl.keystore.file=/opt/jmeter/apache-jmeter-5.0/bin/rmi_keystore.jks|" | sed "s|#server.rmi.ssl.keystore.password=changeit|server.rmi.ssl.keystore.password=changeit|" | sed "s|#server.rmi.ssl.keystore.alias=rmi|server.rmi.ssl.keystore.alias=rmi|" > /opt/jmeter/apache-jmeter-5.0/bin/jmeter.properties
