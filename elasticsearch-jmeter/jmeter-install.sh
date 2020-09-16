@@ -204,6 +204,7 @@ install_jmeter()
         
         update_config_sub
         setup_jmeter_service
+        install_phantomjs
     else
         log "setting up boss node"
         iptables -A INPUT -p tcp --match multiport --dports 1000:5000 -j ACCEPT
@@ -285,6 +286,5 @@ install_java
 install_chromedriver
 install_jmeter
 create_jmeter_startup_script
-install_phantomjs
 
 log "script complete"
