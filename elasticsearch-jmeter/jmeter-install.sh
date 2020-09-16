@@ -276,7 +276,7 @@ fi
 
 install_java
 install_chromedriver
-create_jmeter_startup_script
 install_jmeter
+create_jmeter_startup_script
 
 log "script complete"
