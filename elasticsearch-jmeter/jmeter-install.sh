@@ -100,20 +100,33 @@ install_java()
     sudo apt install default-jre --assume-yes
 }
 
-install_jmeter_service()
+create_jmeter_startup_script()
 {
-    cat << EOF > /etc/init/jmeter.conf
-    description "JMeter Service"
-
-    start on starting
-    script
-        JVM_ARGS="-Xms1024m -Xmx6144m -XX:NewSize=512m -XX:MaxNewSize=6144m" && export JVM_ARGS && /opt/jmeter/apache-jmeter-5.0/bin/jmeter-server -DChrome_Driver=$(which chromedriver) -Djava.rmi.server.hostname=`ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'`
-        
-    end script
+    cat << EOF > /opt/jmeter/start-jmeter-server.sh
+    #!/bin/bash
+    JVM_ARGS="-Xms1024m -Xmx6144m -XX:NewSize=512m -XX:MaxNewSize=6144m" && export JVM_ARGS && /opt/jmeter/apache-jmeter-5.0/bin/jmeter-server -DChrome_Driver=$(which chromedriver) -Djava.rmi.server.hostname=`ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'`
 EOF
 
-    chmod +x /etc/init/jmeter.conf
-    service jmeter start
+   chmod +x /opt/jmeter/start-jmeter-server.sh
+}
+
+setup_jmeter_service()
+{
+    create_jmeter_startup_script()
+    
+    cat << EOF > /etc/systemd/system/jmeter.service
+    [Unit]
+    Description=JMeter Service
+
+    [Service]
+    ExecStart=/opt/jmeter/start-jmeter-server.sh
+
+    [Install]
+    WantedBy=multi-user.target
+EOF
+
+    sudo systemctl start jmeter
+    sudo systemctl enable jmeter
 }
 
 update_config_sub()
@@ -191,7 +204,7 @@ install_jmeter()
         iptables -A INPUT -m state --state NEW -m tcp -p tcp --match multiport --dports 1000:5000 -j ACCEPT
         
         update_config_sub
-        install_jmeter_service
+        setup_jmeter_service
     else
         log "setting up boss node"
         iptables -A INPUT -p tcp --match multiport --dports 1000:5000 -j ACCEPT
