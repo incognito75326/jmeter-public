@@ -111,10 +111,8 @@ EOF
 }
 
 setup_jmeter_service()
-{
-    create_jmeter_startup_script()
-    
-    sudo cat << EOF > /etc/systemd/system/jmeter.service
+{   
+    cat << EOF > /etc/systemd/system/jmeter.service
     [Unit]
     Description=JMeter Service
 
@@ -278,6 +276,7 @@ fi
 
 install_java
 install_chromedriver
+create_jmeter_startup_script
 install_jmeter
 
 log "script complete"
