@@ -114,7 +114,7 @@ setup_jmeter_service()
 {
     create_jmeter_startup_script()
     
-    cat << EOF > /etc/systemd/system/jmeter.service
+    sudo cat << EOF > /etc/systemd/system/jmeter.service
     [Unit]
     Description=JMeter Service
 
