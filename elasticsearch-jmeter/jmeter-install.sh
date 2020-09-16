@@ -108,6 +108,7 @@ JVM_ARGS="-Xms1024m -Xmx6144m -XX:NewSize=512m -XX:MaxNewSize=6144m" && export J
 EOF
 
    chmod +x /opt/jmeter/start-jmeter-server.sh
+   sudo systemctl start jmeter
 }
 
 setup_jmeter_service()
@@ -124,7 +125,6 @@ ExecStart=/opt/jmeter/start-jmeter-server.sh
 WantedBy=multi-user.target
 EOF
 
-    sudo systemctl start jmeter
     sudo systemctl enable jmeter
 }
 
