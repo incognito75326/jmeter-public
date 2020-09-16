@@ -267,6 +267,12 @@ install_chromedriver()
     log "Chromedriver installed and alias created in /usr/bin"
 }
 
+install_phantomjs()
+{
+    sudo apt --fix-broken install --assume-yes
+	sudo apt install phantomjs --assume-yes
+}
+
 
 if [ ${REMOTE_RANGE} ];
 then
@@ -279,5 +285,6 @@ install_java
 install_chromedriver
 install_jmeter
 create_jmeter_startup_script
+install_phantomjs
 
 log "script complete"
