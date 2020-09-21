@@ -235,19 +235,21 @@ install_chromedriver()
     
     apt-get -y update  > /dev/null
     apt-get -qy install wget default-jre-headless telnet iputils-ping unzip libnss3  #chromium-chromedriver > /dev/null
-    wget -q https://chromedriver.storage.googleapis.com/2.37/chromedriver_linux64.zip
+    wget -q https://chromedriver.storage.googleapis.com/85.0.4183.87/chromedriver_linux64.zip #TODO: Add this to repo to avoid future version mismatches
     unzip chromedriver_linux64.zip
     sudo mv chromedriver /usr/bin/chromedriver
     sudo chown root:root /usr/bin/chromedriver
     sudo chmod +x /usr/bin/chromedriver
     
-    apt-get install libxss1 libappindicator1 libindicator7
-    wget http://security.ubuntu.com/ubuntu/pool/universe/c/chromium-browser/chromium-browser_65.0.3325.181-0ubuntu0.14.04.1_amd64.deb
-    dpkg -i chromium-browser*.deb
-    apt-get install -f
-    dpkg -i chromium-browser*.deb
+    #apt-get install libxss1 libappindicator1 libindicator7
+    #wget http://security.ubuntu.com/ubuntu/pool/universe/c/chromium-browser/chromium-browser_65.0.3325.181-0ubuntu0.14.04.1_amd64.deb
+    #dpkg -i chromium-browser*.deb
+    #apt-get install -f
+    #dpkg -i chromium-browser*.deb
     
-    
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb #TODO: Add this to repo to avoid future version mismatches
+	sudo apt --fix-broken install --assume-yes
+	
     
     #dpkg -i google-chrome*.deb
     #apt-get install -f
