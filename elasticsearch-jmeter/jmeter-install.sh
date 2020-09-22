@@ -104,9 +104,9 @@ create_jmeter_startup_script()
 {
     cat << EOF > /opt/jmeter/start-jmeter-server.sh
 #!/bin/bash
-Xvfb :1 -screen 5 1024x768x8 &
+sudo -u jmeter Xvfb :1 -screen 5 1024x768x8 &
 export DISPLAY=:1.5
-JVM_ARGS="-Xms1024m -Xmx6144m -XX:NewSize=512m -XX:MaxNewSize=6144m" && export JVM_ARGS && /opt/jmeter/apache-jmeter-5.0/bin/jmeter-server -DChrome_Driver=$(which chromedriver) -Djava.rmi.server.hostname=`ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'`
+JVM_ARGS="-Xms1024m -Xmx6144m -XX:NewSize=512m -XX:MaxNewSize=6144m" && export JVM_ARGS && sudo -u jmeter /opt/jmeter/apache-jmeter-5.0/bin/jmeter-server -DChrome_Driver=$(which chromedriver) -Djava.rmi.server.hostname=`ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'`
 EOF
 
    chmod +x /opt/jmeter/start-jmeter-server.sh
@@ -250,6 +250,7 @@ install_chromedriver()
     #dpkg -i chromium-browser*.deb
     
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb #TODO: Add this to repo to avoid future version mismatches
+	sudo dpkg -i google-chrome-stable_current_amd64.deb
 	sudo apt --fix-broken install --assume-yes
 	
 	#Install xvfb (Headless browsers need it too.)
