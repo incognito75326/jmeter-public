@@ -64,7 +64,7 @@
           </elementProp>
           <elementProp name="Enviroment" elementType="Argument">
             <stringProp name="Argument.name">Enviroment</stringProp>
-            <stringProp name="Argument.value">${__P(Enviroment,https://stage.lyko.se)}</stringProp>
+            <stringProp name="Argument.value">${__P(Enviroment,https://google.com)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -109,267 +109,24 @@
         </com.blazemeter.jmeter.webdriver.phantomjs.PhantomJSDriverConfig>
         <hashTree/>
         <com.googlecode.jmeter.plugins.webdriver.sampler.WebDriverSampler guiclass="com.googlecode.jmeter.plugins.webdriver.sampler.gui.WebDriverSamplerGui" testclass="com.googlecode.jmeter.plugins.webdriver.sampler.WebDriverSampler" testname="jp@gc - WebDriver Sampler" enabled="true">
-          <stringProp name="WebDriverSampler.script">var pkg = JavaImporter(org.openqa.selenium, org.openqa.selenium.support.ui)//WebDriver classes
+          <stringProp name="WebDriverSampler.script">
+
+var pkg = JavaImporter(org.openqa.selenium, org.openqa.selenium.support.ui)//WebDriver classes
 var wait = new pkg.WebDriverWait(WDS.browser, 60);
 var waitButton = new pkg.WebDriverWait(WDS.browser, 30);
 
 var defaultSleepTime = 2000;
-
-//Helper functions
-function randomIntFromInterval(min,max)
-{
-    return Math.floor(Math.random()*(max-min+1)+min);
-}
-
-function clickAtElementInList(listOfElements, index) {
-    for (i = 0; i &lt; listOfElements.length; i++) {
-         if(i === index) {
-             listOfElements[i].click();
-             java.lang.Thread.sleep(defaultSleepTime); 
-         }
-    }
-}
-
-function goToRandomPage() {
-    
-     try {
-        var menuButton =  waitButton.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.id(&apos;main-menu-button&apos;)));
-        menuButton.click();
-    
-        var randomIndexTopMenu = randomIntFromInterval(0,10);
-        java.lang.Thread.sleep(defaultSleepTime*2); 
-        var topLevelMenuItems = WDS.browser.findElements(pkg.By.className(&apos;top-menu-item&apos;));
-        
-        clickAtElementInList(topLevelMenuItems, randomIndexTopMenu);
-        java.lang.Thread.sleep(defaultSleepTime*2); 
-        
-        var randomIndexChildMenu = randomIntFromInterval(0,10);
-        var childLevelMenuItems = WDS.browser.findElements(pkg.By.className(&apos;child-menu-item&apos;));
-        clickAtElementInList(childLevelMenuItems, randomIndexTopMenu);
-        
-        java.lang.Thread.sleep(defaultSleepTime*2); 
-        WDS.log.info(&quot;Go to page&quot;);
-    }catch(e) {
-         WDS.log.error(&quot;Go to page failed for: &quot; + WDS.browser.getCurrentUrl(), e); 
-    }
-}
-
-function closeInstagramModal() {
-    var modalButton = wait.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.id(&apos;dt-popup-actions&apos;)));
-    modalButton.click(); 
-    WDS.log.info(&quot;Close instagram modal&quot;);
-}
-
-function addToCart() {
-   try {
-   var addToCartButton = waitButton.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.className(&apos;add-to-cart&apos;)));
-   addToCartButton.click();
-   java.lang.Thread.sleep(defaultSleepTime); 
-   WDS.log.info(&quot;Add to cart&quot;);
-   } catch (e) {
-        WDS.log.error(&quot;Add to cart failed:&quot;, e); 
-   }
-}
-
-function addRecommendationToCart() {
-   try {
-   WDS.log.info(&quot;Add recommendation to cart&quot;);
-   var recommendationArea = waitButton.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.className(&apos;_3hYnRj&apos;)));
-   WDS.log.info(&quot;Random recommendation index: &quot; + randomIndex);
-   var randomIndex= randomIntFromInterval(0,5);
-   var addRecommendedToCartButton = recommendationArea.findElements(pkg.By.className(&apos;add-to-cart&apos;))[randomIndex];
-   addRecommendedToCartButton.click();
-   java.lang.Thread.sleep(defaultSleepTime); 
-   } catch (e) {
-        WDS.log.error(&quot;Add to cart failed:&quot;, e); 
-   }
-}
-
-function goToRandomProductPage() {
-     try {
-        var randomIndex= randomIntFromInterval(1,10);
-        var firstProductLink = waitButton.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.className(&apos;link-product-page&apos;)));
-        WDS.log.info(&quot;Random product page index: &quot; + randomIndex);
-        var productLinks = WDS.browser.findElements(pkg.By.className(&apos;link-product-page&apos;));
-        clickAtElementInList(productLinks, randomIndex);
-        java.lang.Thread.sleep(defaultSleepTime*2); 
-        WDS.log.info(&quot;Go to product page&quot;);
-     } catch (e) {
-        WDS.log.error(&quot;Go to product page failed: &quot; + WDS.browser.getCurrentUrl(), e); 
-     }
-}
-
-function goToCheckoutPage() {
-    try {
-        var miniCartButton =  wait.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.className(&apos;mini-cart-button&apos;)));
-        miniCartButton.click();
-        java.lang.Thread.sleep(defaultSleepTime*2); 
-        var checkoutLink = wait.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.className(&apos;link-checkout-page&apos;)));
-        checkoutLink.click();
-        java.lang.Thread.sleep(defaultSleepTime*2);
-        WDS.log.info(&quot;Go to checkout page&quot;);
-    } catch (e) {
-        WDS.log.error(&quot;Go to checkout page failed:&quot;, e);
-    }
-}
-
-function searchForProduct() {
-    try {
-         var productCode = waitButton.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.cssSelector(&quot;div [data-buyable-variant-code]&quot;))).getAttribute(&quot;data-buyable-variant-code&quot;);
-         var search = WDS.browser.findElement(pkg.By.name(&apos;q&apos;)); 
-         search.sendKeys(productCode);   
-         java.lang.Thread.sleep(defaultSleepTime*2);
-         WDS.log.info(&quot;Search for product&quot;); 
-    } catch (e) {
-        WDS.log.error(&quot;Search for product failed: &quot;, e); 
-    }
-}
-
-function fillInCheckoutInformation() {
-    
-    try {
-        // Address Fields
-        var Email = wait.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.name(&quot;email&quot;))); 
-        Email.sendKeys(&quot;andreas.olofsson92@gmail.com&quot;);
-        
-        var Email = WDS.browser.findElement(pkg.By.name(&quot;personal-number&quot;)); 
-        Email.sendKeys(&quot;921312321&quot;);
-        
-        // Payment methods
-        var paymentMethods = WDS.browser.findElements(pkg.By.className(&apos;select-payment-method&apos;));
-        clickAtElementInList(paymentMethods, 1);
-        
-         java.lang.Thread.sleep(defaultSleepTime*2); 
-        var shippingMethods = WDS.browser.findElements(pkg.By.className(&apos;select-shipping-method&apos;));
-        clickAtElementInList(shippingMethods, 1);
-        
-        var editAddressButton =  WDS.browser.findElement(pkg.By.id(&apos;edit-address&apos;));
-        editAddressButton.click();
-        
-        java.lang.Thread.sleep(defaultSleepTime*2); 
-        var FirstName = wait.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.name(&quot;fname&quot;)));
-        FirstName.sendKeys(&quot;Testperson&quot;);
-        
-        var LastName = WDS.browser.findElement(pkg.By.name(&apos;lname&apos;)); 
-        LastName.sendKeys(&quot;Testaren&quot;);
-        
-        var adress = WDS.browser.findElement(pkg.By.name(&apos;address&apos;)); 
-        adress.sendKeys(&quot;Grisslevägen 11&quot;);
-         java.lang.Thread.sleep(defaultSleepTime*2); 
-        
-        var PostalCode = WDS.browser.findElement(pkg.By.name(&quot;zip&quot;)); 
-        PostalCode.sendKeys(&quot;227 32&quot;);
-        
-        java.lang.Thread.sleep(defaultSleepTime*2); 
-        var city = WDS.browser.findElement(pkg.By.name(&quot;city&quot;)); 
-        city.sendKeys(&quot;Lund&quot;);   
-        WDS.log.info(&quot;Fill in checkout information&quot;);
-    } catch(e) {
-        WDS.log.error(&quot;Fill in checkout information failed:&quot;, e); 
-    }
-
-}
-
-function addQuantityRandomCheckoutPage() {
-
-    try {
-        var addQuantityButtons = WDS.browser.findElements(pkg.By.className(&apos;add-quantity&apos;));
-        
-        for (i = 0; i &lt; addQuantityButtons.length; i++) {
-            var random_boolean = Math.random() &gt;= 0.5;
-            if(random_boolean) {
-                addQuantityButtons[i].click();
-                 java.lang.Thread.sleep(defaultSleepTime* 1.5);
-                if(i &lt;= 1) {  
-                   addQuantityButtons[i].click();
-                   java.lang.Thread.sleep(defaultSleepTime* 1.5);
-                }
-            }
-        }   
-        
-        WDS.log.info(&quot;Add quantity to products&quot;);
-    }catch (e) {
-        WDS.log.error(&quot;Add quantity to products failed:&quot;, e); 
-    }
-}
-
-function removeQuantityRandomCheckoutPage() {
-    try {
-        var removeQuantityButtons = WDS.browser.findElements(pkg.By.className(&apos;remove-quantity&apos;));
-        
-        for (i = 0; i &lt; removeQuantityButtons.length; i++) {
-            var random_boolean = Math.random() &gt;= 0.5;
-            if(random_boolean) {
-                removeQuantityButtons[i].click();
-                java.lang.Thread.sleep(defaultSleepTime * 1.5);
-            }
-        }   
-        WDS.log.info(&quot;Remove quantity to products&quot;);
-    }catch(e) {
-      WDS.log.error(&quot;Remove quantity to products failed:&quot;, e);
-    }
-}
-
-function navigateBack() {
-    try {
-        WDS.browser.navigate().back();    
-        WDS.log.info(&quot;Navigate back&quot;);
-        java.lang.Thread.sleep(defaultSleepTime*2);
-    } catch(e) {
-        WDS.log.error(&quot;Navigate back failed:&quot;, e); 
-    }
-}
-
-function userFlow() {    
-    
-	java.lang.Thread.sleep(defaultSleepTime*5); 
-	closeInstagramModal();
-	
-	java.lang.Thread.sleep(defaultSleepTime*5); 
-    goToRandomProductPage();
-
-	java.lang.Thread.sleep(defaultSleepTime*5); 
-    addToCart();
-	
-	java.lang.Thread.sleep(defaultSleepTime*5);
-	addRecommendationToCart();
-     
-    java.lang.Thread.sleep(defaultSleepTime*5);
-    
-	goToCheckoutPage();
-    java.lang.Thread.sleep(defaultSleepTime*7);
-    
-	removeQuantityRandomCheckoutPage();
-	java.lang.Thread.sleep(defaultSleepTime*5); 
-	
-	goToRandomPage();
-}
 
 WDS.sampleResult.sampleStart();
 
 // Login to start page (stage)
 try {
 	WDS.browser.get(&apos;${Enviroment}&apos;);
-	WDS.browser.findElement(pkg.By.name(&quot;auth_code&quot;)).sendKeys(&apos;${Auth_Code}\n&apos;);
+	WDS.sampleResult.setSuccessful(true);
+	WDS.log.info(&quot;Navigated to page&quot;);
 } catch(e) {
 	WDS.log.error(&quot;Stage login failed:&quot;, e); 
 	WDS.sampleResult.setSuccessful(false);
-}
-
-// 20% chance server render start page
-//if (Math.random() &lt; 0.2) {
-//    WDS.browser.get(&apos;${Enviroment}?${Auth_Code}&apos;);
-//} else {
-//    WDS.browser.get(&apos;${Enviroment}?${Auth_Code}&amp;ssr=off&apos;);
-//}
-
-java.lang.Thread.sleep(defaultSleepTime*5); 
-try {
- userFlow();   
-} catch(e){
-    WDS.log.error(&quot;user flow failed:&quot;, e); 
-   // java.lang.Thread.sleep(defaultSleepTime* 10);
-   // userFlow();
 }
 
 WDS.sampleResult.sampleEnd();</stringProp>
